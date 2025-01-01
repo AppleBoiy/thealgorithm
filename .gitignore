@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__
+out/
+dist/
+build/
+*.egg-info/
+.ropeproject
+python/venv/
+venv/
+*.pyc
+*.pyo
+*.idea/
+.coverage
+htmlcov/
