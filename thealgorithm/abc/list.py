@@ -4,17 +4,16 @@ from .node import Node
 
 
 class LinearList(MutSequence, Iterable):
-    def __init__(self):
+    def __init__(self, *values):
         super().__init__()
         self._head = None
+        self._size = 0
+
+        if values:
+            self.extend(*values)
 
     def __repr__(self):
-        _str = "[ "
-        curr = self._head
-        while curr is not None:
-            _str += str(curr.value) + " "
-            curr = curr.next
-        return _str + "]"
+        return f"[{' '.join(map(str, self))}]"
 
     def __iter__(self):
         self._curr = self._head
@@ -54,7 +53,7 @@ class LinearList(MutSequence, Iterable):
             result = []
             for i in range(start, stop, step):
                 result.append(self.__get_node(i).value)
-            return llist(result)
+            return LinearList(result)
         else:
             raise TypeError("Invalid argument type.")
 
@@ -82,8 +81,7 @@ class LinearList(MutSequence, Iterable):
         return self.__get_node(index).value
 
     def push(self, value):
-        _new = Node(value, next=self._head)
-        self._head = _new
+        self._head = Node(value, next=self._head)
         self._size += 1
 
     def insert(self, index, value):
@@ -107,40 +105,27 @@ class LinearList(MutSequence, Iterable):
         self._size += 1
 
     def append(self, value):
-        _new = Node(value)
-        if not self:
-            self._head = _new
-            self._size += 1
-            return
-
-        _curr = self._head
-        while _curr.next:
-            _curr = _curr.next
-        _curr.next = _new
+        new_node = Node(value)
+        if not self._head:
+            self._head = new_node
+        else:
+            curr = self._head
+            while curr.next:
+                curr = curr.next
+            curr.next = new_node
         self._size += 1
 
     def pop(self, index=None):
-        if not self:
+        if not self._size:
             raise IndexError("pop from empty LinearList")
-        if index is None:
-            index = self._size - 1
-        if not (0 <= index < len(self)):
-            raise IndexError("llist.pop(index): index out of range.")
-        if len(self) == 1:
-            value = self._head.value
-            self.clear()
-            return value
+        index = index if index is not None else self._size - 1
         if index == 0:
             value = self._head.value
             self._head = self._head.next
-            self._size -= 1
-            return value
-        _curr = self._head
-        for _ in range(index - 1):
-            _curr = _curr.next
-
-        value = _curr.next.value
-        _curr.next = _curr.next.next
+        else:
+            prev = self.__get_node(index - 1)
+            value = prev.next.value
+            prev.next = prev.next.next
         self._size -= 1
         return value
 
@@ -165,35 +150,26 @@ class LinearList(MutSequence, Iterable):
         _from, _to = self.__get_node(from_i), self.__get_node(to_i)
         _from.value, _to.value = _to.value, _from.value
 
-    def extend(self, others):
-        if not isinstance(others, Iterable):
-            raise TypeError(f"'{type(others)}' object is not iterable")
-
-        tail = llist(others)
-        _curr = self._head
-        if _curr:
-            while _curr.next:
-                _curr = _curr.next
-            _curr.next = tail.__get_node(0)
-        else:
-            self._head = tail.__get_node(0)
-
-        self._size += len(tail)
+    def extend(self, *others):
+        for other in others:
+            if not isinstance(other, Iterable):
+                raise TypeError(f"'{type(other).__name__}' object is not iterable")
+            for value in other:
+                self.append(value)
 
 
 class DoublyList(MutSequence, Iterable):
-    def __init__(self):
+    def __init__(self, *values):
         super().__init__()
         self._head = None
         self._tail = None
+        self._size = 0
+
+        if values:
+            self.extend(*values)
 
     def __repr__(self):
-        _str = "[ "
-        _curr = self._head
-        while _curr:
-            _str += str(_curr.value) + " "
-            _curr = _curr.next
-        return _str + "]"
+        return f"[{' '.join(map(str, self))}]"
 
     def __iter__(self):
         self._curr = self._head
@@ -234,7 +210,7 @@ class DoublyList(MutSequence, Iterable):
             result = []
             for i in range(start, stop, step):
                 result.append(self.__get_node(i).value)
-            return dlist(result)
+            return DoublyList(result)
         else:
             raise TypeError("Invalid argument type.")
 
@@ -318,30 +294,20 @@ class DoublyList(MutSequence, Iterable):
         return -1
 
     def pop(self, index=None):
-        if not self:
-            raise IndexError("pop from empty LinearList")
-        index = self._size - 1 if index is None else index
-        if not self._is_valid_index(index):
-            raise IndexError("dlist.pop(index): index out of range.")
-        if len(self) == 1:
-            value = self._head.value
-            self.clear()
-            return value
-        if index == 0:
-            value = self._head.value
-            self._head = self._head.next
-            self._head.prev = None
-        elif index == -1 or index == self._size - 1:
-            value = self._tail.value
-            self._tail = self._tail.prev
-            self._tail.next = None
-        else:
-            _curr = self.__get_node(index if index >= 0 else index + len(self))
-            _curr.prev.next = _curr.next
-            _curr.next.prev = _curr.prev
-            value = _curr.value
+        if not self._size:
+            raise IndexError("pop from empty DoublyList")
+        index = index if index is not None else self._size - 1
+        node = self.__get_node(index)
+        if node.prev:
+            node.prev.next = node.next
+        if node.next:
+            node.next.prev = node.prev
+        if node == self._head:
+            self._head = node.next
+        if node == self._tail:
+            self._tail = node.prev
         self._size -= 1
-        return value
+        return node.value
 
     def remove(self, value):
         index = self.find(value)
@@ -364,41 +330,9 @@ class DoublyList(MutSequence, Iterable):
         _from, _to = self.__get_node(from_i), self.__get_node(to_i)
         _from.value, _to.value = _to.value, _from.value
 
-    def extend(self, others):
-        if not isinstance(others, Iterable):
-            raise TypeError(f"'{type(others)}' object is not iterable")
-
-        tail = dlist(others)
-        if self._tail:
-            tail.__get_node(0).prev = self._tail
-            self._tail.next = tail.__get_node(0)
-            self._tail = tail.__get_node(-1)
-        else:
-            self._head = tail.__get_node(0)
-            self._tail = tail.__get_node(-1)
-
-        self._size += len(tail)
-
-
-def llist(iter: Iterable) -> LinearList:
-    if not isinstance(iter, Iterable):
-        raise TypeError(
-            "LinearList.__init__(iter: iterable) -> LinearList: Expected an iterable object."
-        )
-
-    _llist = LinearList()
-    for item in iter:
-        _llist.append(item)
-    return _llist
-
-
-def dlist(iter: Iterable) -> DoublyList:
-    if not isinstance(iter, Iterable):
-        raise TypeError(
-            "DoublyList.__init__(iter: iterable) -> DoublyList: Expected an iterable object."
-        )
-
-    _dlist = DoublyList()
-    for item in iter:
-        _dlist.append(item)
-    return _dlist
+    def extend(self, *others):
+        for other in others:
+            if not isinstance(other, Iterable):
+                raise TypeError(f"'{type(other).__name__}' object is not iterable")
+            for value in other:
+                self.append(value)

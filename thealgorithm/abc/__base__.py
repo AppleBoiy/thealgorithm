@@ -11,6 +11,9 @@ class Sequence:
     def __bool__(self):
         return len(self) != 0
 
+    def __getitem__(self, value):
+        raise NotImplementedError("__getitem__() method is not implemented yet")
+
     def __eq__(self, other):
         if len(self) != len(other):
             return False
