@@ -1,13 +1,14 @@
 from .__base__ import Sequence
 from .node import Node
 
+
 class Stack(Sequence):
-    def __init__(self, size = 1000):
+    def __init__(self, size=1000):
         super().__init__()
         self._head = None
         self._max_size = size
 
-    def push(self,  value):
+    def push(self, value):
         if not self:
             self._head = Node(value)
             self._size = 1

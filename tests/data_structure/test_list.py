@@ -322,6 +322,32 @@ class TestLinearListExtended(unittest.TestCase):
         self.assertTrue(5 in self.list)
         self.assertFalse(6 in self.list)
 
+    def test_extend(self):
+        others_llist = llist([1, 2, 3])
+        others_string = "123"
+        others_int = 123
+        others_set = {1, 2, 3}
+        others_dict = {1: 2, 2: 3, 3: 4}
+
+        self.list.clear()
+        self.assertFalse(self.list)
+
+        self.list.extend(others_llist)
+        self.assertEqual(self.list, [1, 2, 3])
+
+        self.list.extend(others_string)
+        self.assertEqual(self.list, [1, 2, 3, "1", "2", "3"])
+
+        self.list.extend(others_set)
+        self.assertEqual(self.list, [1, 2, 3, "1", "2", "3", 1, 2, 3])
+
+        self.list.extend(others_dict)
+        self.assertEqual(self.list, [1, 2, 3, "1", "2", "3", 1, 2, 3, 1, 2, 3])
+
+        with self.assertRaises(TypeError):
+            self.list.extend(others_int)
+
+
 class TestLinearListIteration(unittest.TestCase):
     def setUp(self):
         self.list = LinearList()
@@ -577,6 +603,31 @@ class TestDoublyList(unittest.TestCase):
         self.assertEqual(repr(self.dlist), "[ 100 5 10 15 -1 20 30 35 25 ]")
         self.assertEqual(len(self.dlist), 9)
 
+    def test_extend(self):
+        others_dlist = dlist([1, 2, 3])
+        others_string = "123"
+        others_int = 123
+        others_set = {1, 2, 3}
+        others_dict = {1: 2, 2: 3, 3: 4}
+
+        self.dlist.clear()
+        self.assertFalse(self.dlist)
+
+        self.dlist.extend(others_dlist)
+        self.assertEqual(self.dlist, [1, 2, 3])
+
+        self.dlist.extend(others_string)
+        self.assertEqual(self.dlist, [1, 2, 3, "1", "2", "3"])
+
+        self.dlist.extend(others_set)
+        self.assertEqual(self.dlist, [1, 2, 3, "1", "2", "3", 1, 2, 3])
+
+        self.dlist.extend(others_dict)
+        self.assertEqual(self.dlist, [1, 2, 3, "1", "2", "3", 1, 2, 3, 1, 2, 3])
+
+        with self.assertRaises(TypeError):
+            self.dlist.extend(others_int)
+
     def test_replace(self):
         self.dlist.append(10)
         self.dlist.append(20)
@@ -725,6 +776,7 @@ class TestDoublyList(unittest.TestCase):
         dlist_single.append(5)
         self.assertTrue(5 in dlist_single)
         self.assertFalse(6 in dlist_single)
+
 
 class TestDoublyListSlice(unittest.TestCase):
     def setUp(self):

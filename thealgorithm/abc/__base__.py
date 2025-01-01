@@ -25,6 +25,7 @@ class Sequence:
     def find(self, value):
         raise NotImplementedError("find() method is not implemented yet")
 
+
 class MutSequence(Sequence):
     def __init__(self):
         super().__init__()

@@ -1,6 +1,7 @@
 import unittest
 from thealgorithm.abc.__base__ import MutSequence
 
+
 class TestMutSequence(unittest.TestCase):
     def test_sequence_len(self):
         seq = MutSequence()
@@ -18,5 +19,6 @@ class TestMutSequence(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             seq.find(2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

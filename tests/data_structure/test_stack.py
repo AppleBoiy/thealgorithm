@@ -1,6 +1,7 @@
 import unittest
 from thealgorithm.abc.stack import Stack
 
+
 class TestStackPush(unittest.TestCase):
 
     def setUp(self):
@@ -24,11 +25,14 @@ class TestStackPush(unittest.TestCase):
         self.stack.push(30)
         with self.assertRaises(OverflowError) as context:
             self.stack.push(40)
-        self.assertEqual(str(context.exception), "the stack has reached its maximum capacity.")
+        self.assertEqual(
+            str(context.exception), "the stack has reached its maximum capacity."
+        )
 
     def test_empty_stack(self):
         self.assertEqual(len(self.stack), 0)
         self.assertIsNone(self.stack._head)
+
 
 class TestStackPop(unittest.TestCase):
 
@@ -66,9 +70,10 @@ class TestStackPop(unittest.TestCase):
     def test_pop_after_overflow(self):
         with self.assertRaises(OverflowError) as context:
             self.stack.push(40)
-        popped_value = self.stack.pop()     # Pops 30
+        popped_value = self.stack.pop()  # Pops 30
         self.assertEqual(popped_value, 30)
         self.assertEqual(len(self.stack), 2)
+
 
 class TestStackExtended(unittest.TestCase):
 
@@ -79,7 +84,9 @@ class TestStackExtended(unittest.TestCase):
         self.stack.push(30)
 
     def test_peek_non_empty_stack(self):
-        self.assertEqual(self.stack.peek(), 30)  # Should return the top element without removing it
+        self.assertEqual(
+            self.stack.peek(), 30
+        )  # Should return the top element without removing it
 
     def test_peek_empty_stack(self):
         self.stack.pop()

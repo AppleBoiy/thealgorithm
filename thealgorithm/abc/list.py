@@ -3,8 +3,7 @@ from .__base__ import MutSequence
 from .node import Node
 
 
-
-class LinearList(MutSequence):
+class LinearList(MutSequence, Iterable):
     def __init__(self):
         super().__init__()
         self._head = None
@@ -69,16 +68,12 @@ class LinearList(MutSequence):
         self._head = None
         self._size = 0
 
-    def find(self, item):
+    def find(self, value):
         if not self:
             return -1
-        curr = self._head
-        idx = 0
-        while curr is not None:
-            if curr.value == item:
-                return idx
-            curr = curr.next
-            idx += 1
+        for i, ivalue in enumerate(self):
+            if ivalue == value:
+                return i
         return -1
 
     def get(self, index):
@@ -170,8 +165,23 @@ class LinearList(MutSequence):
         _from, _to = self.__get_node(from_i), self.__get_node(to_i)
         _from.value, _to.value = _to.value, _from.value
 
+    def extend(self, others):
+        if not isinstance(others, Iterable):
+            raise TypeError(f"'{type(others)}' object is not iterable")
 
-class DoublyList(MutSequence):
+        tail = llist(others)
+        _curr = self._head
+        if _curr:
+            while _curr.next:
+                _curr = _curr.next
+            _curr.next = tail.__get_node(0)
+        else:
+            self._head = tail.__get_node(0)
+
+        self._size += len(tail)
+
+
+class DoublyList(MutSequence, Iterable):
     def __init__(self):
         super().__init__()
         self._head = None
@@ -299,14 +309,12 @@ class DoublyList(MutSequence):
 
             self._size += 1
 
-    def find(self, item):
+    def find(self, value):
         if not self:
             return -1
-        _curr = self._head
-        for i in range(len(self)):
-            if item == _curr.value:
+        for i, ivalue in enumerate(self):
+            if value == ivalue:
                 return i
-            _curr = _curr.next
         return -1
 
     def pop(self, index=None):
@@ -355,6 +363,21 @@ class DoublyList(MutSequence):
 
         _from, _to = self.__get_node(from_i), self.__get_node(to_i)
         _from.value, _to.value = _to.value, _from.value
+
+    def extend(self, others):
+        if not isinstance(others, Iterable):
+            raise TypeError(f"'{type(others)}' object is not iterable")
+
+        tail = dlist(others)
+        if self._tail:
+            tail.__get_node(0).prev = self._tail
+            self._tail.next = tail.__get_node(0)
+            self._tail = tail.__get_node(-1)
+        else:
+            self._head = tail.__get_node(0)
+            self._tail = tail.__get_node(-1)
+
+        self._size += len(tail)
 
 
 def llist(iter: Iterable) -> LinearList:
