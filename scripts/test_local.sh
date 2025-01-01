@@ -1,7 +1,8 @@
 #!/bin/bash
 
 rm -rf dist build
-if [ -d "venv" ]; then
+# check venv activate or not
+if [ -d "venv" ] && ! [ -z "$VIRTUAL_ENV" ]; then
     source venv/bin/activate
 else
     echo "Running without virtual environment."

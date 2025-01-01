@@ -1,30 +1,35 @@
-class Stack:
-    def __init__(self, max_size: int):
-        self._max_size = max_size
-        self._size = 0
-        self._items = []
+from .__base__ import Sequence
+from .node import Node
 
-    def push(self, object) -> bool:
-        if self.size < self._max_size:
-            self._items.append(object)
-            self._size += 1
-            return True
-        return False
+class Stack(Sequence):
+    def __init__(self, size = 1000):
+        super().__init__()
+        self._head = None
+        self._max_size = size
+
+    def push(self,  value):
+        if not self:
+            self._head = Node(value)
+            self._size = 1
+            return
+
+        if len(self) >= self._max_size:
+            raise OverflowError("the stack has reached its maximum capacity.")
+
+        self._head = Node(value, self._head)
+        self._size += 1
 
     def pop(self):
-        if self.is_empty():
-            return None
+        if not self:
+            raise IndexError("pop from empty stack")
+        value = self._head.value
+        self._head = self._head.next
         self._size -= 1
-        return self._items.pop()
+        return value
 
-    def top(self):
-        if self.size == 0:
-            return None
-        return self._items[-1]
+    def peek(self):
+        return None if not self else self._head.value
 
-    def is_empty(self):
-        return self._size == 0
-
-    @property
-    def size(self):
-        return self._size
+    def clear(self):
+        self._size = 0
+        self._head = None

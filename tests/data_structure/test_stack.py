@@ -1,57 +1,97 @@
 import unittest
 from thealgorithm.abc.stack import Stack
 
-
-class TestStack(unittest.TestCase):
+class TestStackPush(unittest.TestCase):
 
     def setUp(self):
-        """Set up a new stack with a max size of 3 for each test."""
-        self.stack = Stack(max_size=3)
+        self.stack = Stack(size=3)
 
-    def test_push_within_limit(self):
-        """Test pushing items within the size limit."""
-        self.assertTrue(self.stack.push(1))
-        self.assertTrue(self.stack.push(2))
-        self.assertEqual(self.stack.size, 2)
+    def test_push_single_element(self):
+        self.stack.push(10)
+        self.assertEqual(len(self.stack), 1)
+        self.assertEqual(self.stack._head.value, 10)
 
-    def test_push_beyond_limit(self):
-        """Test pushing items beyond the size limit."""
-        self.stack.push(1)
-        self.stack.push(2)
-        self.stack.push(3)
-        self.assertFalse(self.stack.push(4))  # Should return False
-        self.assertEqual(self.stack.size, 3)  # Size remains at max
+    def test_push_multiple_elements(self):
+        self.stack.push(10)
+        self.stack.push(20)
+        self.stack.push(30)
+        self.assertEqual(len(self.stack), 3)
+        self.assertEqual(self.stack._head.value, 30)
 
-    def test_pop(self):
-        """Test popping items off the stack."""
-        self.stack.push(1)
-        self.stack.push(2)
-        self.assertEqual(self.stack.pop(), 2)  # LIFO behavior
-        self.assertEqual(self.stack.size, 1)
+    def test_push_overflow(self):
+        self.stack.push(10)
+        self.stack.push(20)
+        self.stack.push(30)
+        with self.assertRaises(OverflowError) as context:
+            self.stack.push(40)
+        self.assertEqual(str(context.exception), "the stack has reached its maximum capacity.")
+
+    def test_empty_stack(self):
+        self.assertEqual(len(self.stack), 0)
+        self.assertIsNone(self.stack._head)
+
+class TestStackPop(unittest.TestCase):
+
+    def setUp(self):
+        self.stack = Stack(size=3)
+        self.stack.push(10)
+        self.stack.push(20)
+        self.stack.push(30)
+
+    def test_pop_single_element(self):
+        popped_value = self.stack.pop()
+        self.assertEqual(popped_value, 30)  # Last pushed element should be popped
+        self.assertEqual(len(self.stack), 2)
+        self.assertEqual(self.stack._head.value, 20)
+
+    def test_pop_multiple_elements(self):
+        popped_value1 = self.stack.pop()
+        self.assertEqual(popped_value1, 30)
+        self.assertEqual(len(self.stack), 2)
+
+        popped_value2 = self.stack.pop()
+        self.assertEqual(popped_value2, 20)
+        self.assertEqual(len(self.stack), 1)
 
     def test_pop_empty_stack(self):
-        """Test popping from an empty stack returns None."""
-        self.assertIsNone(self.stack.pop())
-
-    def test_top(self):
-        """Test retrieving the top item."""
-        self.assertIsNone(self.stack.top())  # Empty stack should return None
-        self.stack.push(1)
-        self.stack.push(2)
-        self.assertEqual(self.stack.top(), 2)  # Top should return the last pushed item
-
-    def test_is_empty(self):
-        """Test the is_empty method."""
-        self.assertTrue(self.stack.is_empty())  # Should be empty initially
-        self.stack.push(1)
-        self.assertFalse(self.stack.is_empty())  # Should not be empty after push
-
-    def test_size_property(self):
-        """Test the size property."""
-        self.assertEqual(self.stack.size, 0)
-        self.stack.push(1)
-        self.assertEqual(self.stack.size, 1)
-        self.stack.push(2)
-        self.assertEqual(self.stack.size, 2)
+        # Pop all elements to empty the stack
         self.stack.pop()
-        self.assertEqual(self.stack.size, 1)
+        self.stack.pop()
+        self.stack.pop()
+
+        with self.assertRaises(IndexError) as context:
+            self.stack.pop()  # Pop from an empty stack
+        self.assertEqual(str(context.exception), "pop from empty stack")
+
+    def test_pop_after_overflow(self):
+        with self.assertRaises(OverflowError) as context:
+            self.stack.push(40)
+        popped_value = self.stack.pop()     # Pops 30
+        self.assertEqual(popped_value, 30)
+        self.assertEqual(len(self.stack), 2)
+
+class TestStackExtended(unittest.TestCase):
+
+    def setUp(self):
+        self.stack = Stack()
+        self.stack.push(10)
+        self.stack.push(20)
+        self.stack.push(30)
+
+    def test_peek_non_empty_stack(self):
+        self.assertEqual(self.stack.peek(), 30)  # Should return the top element without removing it
+
+    def test_peek_empty_stack(self):
+        self.stack.pop()
+        self.stack.pop()
+        self.stack.pop()
+        self.assertIsNone(self.stack.peek())  # Should return None for an empty stack
+
+    def test_clear_non_empty_stack(self):
+        self.stack.clear()
+        self.assertFalse(self.stack)  # Should be empty after clearing
+        self.assertEqual(len(self.stack), 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,7 +1,7 @@
 from ..sorting import quick
 
 
-class MutSequence:
+class Sequence:
     def __init__(self):
         self._size = 0
 
@@ -18,6 +18,16 @@ class MutSequence:
             if self[i] != other[i]:
                 return False
         return True
+
+    def __contains__(self, value):
+        return self.find(value) >= 0
+
+    def find(self, value):
+        raise NotImplementedError("find() method is not implemented yet")
+
+class MutSequence(Sequence):
+    def __init__(self):
+        super().__init__()
 
     def sort(self, reverse: bool = False):
         quick(self, 0, len(self) - 1, reverse)

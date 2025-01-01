@@ -309,6 +309,18 @@ class TestLinearListExtended(unittest.TestCase):
         with self.assertRaises(IndexError):
             del self.list[3]
 
+    def test_contains(self):
+        self.assertFalse(2 in self.list)
+        self.list.append(1)
+        self.list.append(2)
+        self.list.append(3)
+        self.assertTrue(2 in self.list)
+        self.assertFalse(4 in self.list)
+        self.assertTrue(3 in self.list)
+        self.list.clear()
+        self.list.append(5)
+        self.assertTrue(5 in self.list)
+        self.assertFalse(6 in self.list)
 
 class TestLinearListIteration(unittest.TestCase):
     def setUp(self):
@@ -700,6 +712,19 @@ class TestDoublyList(unittest.TestCase):
         with self.assertRaises(IndexError):
             del self.dlist[-1]
 
+    def test_contains(self):
+        dlist = DoublyList()
+        self.assertFalse(2 in dlist)
+        dlist.append(1)
+        dlist.append(2)
+        dlist.append(3)
+        self.assertTrue(2 in dlist)
+        self.assertFalse(4 in dlist)
+        self.assertTrue(3 in dlist)
+        dlist_single = DoublyList()
+        dlist_single.append(5)
+        self.assertTrue(5 in dlist_single)
+        self.assertFalse(6 in dlist_single)
 
 class TestDoublyListSlice(unittest.TestCase):
     def setUp(self):
