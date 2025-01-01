@@ -1,54 +1,54 @@
 import unittest
-from thealgorithm.abc.list import LinearList, DoublyList
+from thealgorithm.abc import llist, dlist
 
 
 class TestCreateLinearList(unittest.TestCase):
     def test_llist(self):
         iterable_int = [10, 20, 30]
-        new_list_int = LinearList(iterable_int)
+        new_list_int = llist(iterable_int)
         self.assertEqual(repr(new_list_int), "[10 20 30]")
         self.assertEqual(len(new_list_int), 3)
 
         iterable_str = ["apple", "banana", "cherry"]
-        new_list_str = LinearList(iterable_str)
+        new_list_str = llist(iterable_str)
         self.assertEqual(repr(new_list_str), "[apple banana cherry]")
         self.assertEqual(len(new_list_str), 3)
 
         iterable_str = "abc"
-        new_list_str = LinearList(iterable_str)
+        new_list_str = llist(iterable_str)
         self.assertEqual(repr(new_list_str), "[a b c]")
         self.assertEqual(len(new_list_str), 3)
 
         iterable_mixed = [10, "apple", 3.14, True]
-        new_list_mixed = LinearList(iterable_mixed)
+        new_list_mixed = llist(iterable_mixed)
         self.assertEqual(repr(new_list_mixed), "[10 apple 3.14 True]")
         self.assertEqual(len(new_list_mixed), 4)
 
         iterable_dict = [{"key": "value"}, {"name": "Alice"}]
-        new_list_dict = LinearList(iterable_dict)
+        new_list_dict = llist(iterable_dict)
         self.assertEqual(repr(new_list_dict), "[{'key': 'value'} {'name': 'Alice'}]")
         self.assertEqual(len(new_list_dict), 2)
 
         iterable_set = {1, 2, 3}
-        new_list_set = LinearList(iterable_set)
+        new_list_set = llist(iterable_set)
         self.assertEqual(repr(new_list_set), "[1 2 3]")
         self.assertEqual(len(new_list_set), 3)
 
         empty_iterable = []
-        empty_list = LinearList(empty_iterable)
+        empty_list = llist(empty_iterable)
         self.assertEqual(repr(empty_list), "[]")
         self.assertEqual(len(empty_list), 0)
 
         with self.assertRaises(TypeError):
-            LinearList(123)
+            llist(123)
 
         with self.assertRaises(TypeError):
-            LinearList(None)
+            llist(None)
 
 
 class TestLinearList(unittest.TestCase):
     def setUp(self):
-        self.list = LinearList()
+        self.list = llist()
 
     def test_bool(self):
         self.assertFalse(self.list)  # Empty list should evaluate to False
@@ -56,15 +56,14 @@ class TestLinearList(unittest.TestCase):
         self.assertFalse(not self.list)  # Non-empty list should evaluate to False
 
     def test_push(self):
-        llist = LinearList()
-        llist.push(10)
-        self.assertEqual(repr(llist), "[10]")
-        self.assertEqual(len(llist), 1)
+        self.list.push(10)
+        self.assertEqual(repr(self.list), "[10]")
+        self.assertEqual(len(self.list), 1)
 
-        llist.push(20)
-        llist.push(30)
-        self.assertEqual(repr(llist), "[30 20 10]")
-        self.assertEqual(len(llist), 3)
+        self.list.push(20)
+        self.list.push(30)
+        self.assertEqual(repr(self.list), "[30 20 10]")
+        self.assertEqual(len(self.list), 3)
 
     def test_append(self):
         self.list.append(10)
@@ -115,7 +114,7 @@ class TestLinearList(unittest.TestCase):
 
 class TestLinkedListSlice(unittest.TestCase):
     def setUp(self):
-        self.ll = LinearList()
+        self.ll = llist()
         self.ll.append(10)
         self.ll.append(20)
         self.ll.append(30)
@@ -133,11 +132,11 @@ class TestLinkedListSlice(unittest.TestCase):
             _ = self.ll[-1]
 
     def test_slicing(self):
-        self.assertEqual(self.ll[:2], LinearList([10, 20]))
-        self.assertEqual(self.ll[1:3], LinearList([20, 30]))
-        self.assertEqual(self.ll[::2], LinearList([10, 30]))
-        self.assertEqual(self.ll[1:], LinearList([20, 30, 40]))
-        self.assertEqual(self.ll[:], LinearList([10, 20, 30, 40]))
+        self.assertEqual(self.ll[:2], llist([10, 20]))
+        self.assertEqual(self.ll[1:3], llist([20, 30]))
+        self.assertEqual(self.ll[::2], llist([10, 30]))
+        self.assertEqual(self.ll[1:], llist([20, 30, 40]))
+        self.assertEqual(self.ll[:], llist([10, 20, 30, 40]))
 
     def test_invalid_type(self):
         with self.assertRaises(TypeError):
@@ -146,7 +145,7 @@ class TestLinkedListSlice(unittest.TestCase):
 
 class TestLinearListExtended(unittest.TestCase):
     def setUp(self):
-        self.list = LinearList()
+        self.list = llist()
 
     def test_pop(self):
         self.list.append(10)
@@ -323,7 +322,7 @@ class TestLinearListExtended(unittest.TestCase):
         self.assertFalse(6 in self.list)
 
     def test_extend(self):
-        others_llist = LinearList([1, 2, 3])
+        others_llist = llist([1, 2, 3])
         others_string = "123"
         others_int = 123
         others_set = {1, 2, 3}
@@ -350,7 +349,7 @@ class TestLinearListExtended(unittest.TestCase):
 
 class TestLinearListIteration(unittest.TestCase):
     def setUp(self):
-        self.list = LinearList()
+        self.list = llist()
 
     def test_iteration_empty_list(self):
         result = [item for item in self.list]
@@ -408,52 +407,52 @@ class TestLinearListIteration(unittest.TestCase):
 
 
 class TestCreateDoublyList(unittest.TestCase):
-    def test_llist(self):
+    def test_dlist(self):
         iterable_int = [10, 20, 30]
-        new_list_int = DoublyList(iterable_int)
+        new_list_int = dlist(iterable_int)
         self.assertEqual(repr(new_list_int), "[10 20 30]")
         self.assertEqual(len(new_list_int), 3)
 
         iterable_str = ["apple", "banana", "cherry"]
-        new_list_str = DoublyList(iterable_str)
+        new_list_str = dlist(iterable_str)
         self.assertEqual(repr(new_list_str), "[apple banana cherry]")
         self.assertEqual(len(new_list_str), 3)
 
         iterable_str = "abc"
-        new_list_str = DoublyList(iterable_str)
+        new_list_str = dlist(iterable_str)
         self.assertEqual(repr(new_list_str), "[a b c]")
         self.assertEqual(len(new_list_str), 3)
 
         iterable_mixed = [10, "apple", 3.14, True]
-        new_list_mixed = DoublyList(iterable_mixed)
+        new_list_mixed = dlist(iterable_mixed)
         self.assertEqual(repr(new_list_mixed), "[10 apple 3.14 True]")
         self.assertEqual(len(new_list_mixed), 4)
 
         iterable_dict = [{"key": "value"}, {"name": "Alice"}]
-        new_list_dict = DoublyList(iterable_dict)
+        new_list_dict = dlist(iterable_dict)
         self.assertEqual(repr(new_list_dict), "[{'key': 'value'} {'name': 'Alice'}]")
         self.assertEqual(len(new_list_dict), 2)
 
         iterable_set = {1, 2, 3}
-        new_list_set = DoublyList(iterable_set)
+        new_list_set = dlist(iterable_set)
         self.assertEqual(repr(new_list_set), "[1 2 3]")
         self.assertEqual(len(new_list_set), 3)
 
         empty_iterable = []
-        empty_list = DoublyList(empty_iterable)
+        empty_list = dlist(empty_iterable)
         self.assertEqual(repr(empty_list), "[]")
         self.assertEqual(len(empty_list), 0)
 
         with self.assertRaises(TypeError):
-            DoublyList(123)
+            dlist(123)
 
         with self.assertRaises(TypeError):
-            DoublyList(None)
+            dlist(None)
 
 
 class TestDoublyList(unittest.TestCase):
     def setUp(self):
-        self.dlist = DoublyList()
+        self.dlist = dlist()
 
     def test_push(self):
         self.dlist.push(10)
@@ -604,7 +603,7 @@ class TestDoublyList(unittest.TestCase):
         self.assertEqual(len(self.dlist), 9)
 
     def test_extend(self):
-        others_dlist = DoublyList([1, 2, 3])
+        others_dlist = dlist([1, 2, 3])
         others_string = "123"
         others_int = 123
         others_set = {1, 2, 3}
@@ -764,15 +763,14 @@ class TestDoublyList(unittest.TestCase):
             del self.dlist[-1]
 
     def test_contains(self):
-        dlist = DoublyList()
-        self.assertFalse(2 in dlist)
-        dlist.append(1)
-        dlist.append(2)
-        dlist.append(3)
-        self.assertTrue(2 in dlist)
-        self.assertFalse(4 in dlist)
-        self.assertTrue(3 in dlist)
-        dlist_single = DoublyList()
+        self.assertFalse(2 in self.dlist)
+        self.dlist.append(1)
+        self.dlist.append(2)
+        self.dlist.append(3)
+        self.assertTrue(2 in self.dlist)
+        self.assertFalse(4 in self.dlist)
+        self.assertTrue(3 in self.dlist)
+        dlist_single = dlist()
         dlist_single.append(5)
         self.assertTrue(5 in dlist_single)
         self.assertFalse(6 in dlist_single)
@@ -780,7 +778,7 @@ class TestDoublyList(unittest.TestCase):
 
 class TestDoublyListSlice(unittest.TestCase):
     def setUp(self):
-        self.dl = DoublyList()
+        self.dl = dlist()
         self.dl.append(10)
         self.dl.append(20)
         self.dl.append(30)
