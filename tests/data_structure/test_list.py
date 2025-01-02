@@ -332,16 +332,16 @@ class TestLinearListExtended(unittest.TestCase):
         self.assertFalse(self.list)
 
         self.list.extend(others_llist)
-        self.assertEqual(self.list, [1, 2, 3])
+        self.assertEqual(self.list, dlist([1, 2, 3]))
 
         self.list.extend(others_string)
-        self.assertEqual(self.list, [1, 2, 3, "1", "2", "3"])
+        self.assertEqual(self.list, dlist([1, 2, 3, "1", "2", "3"]))
 
         self.list.extend(others_set)
-        self.assertEqual(self.list, [1, 2, 3, "1", "2", "3", 1, 2, 3])
+        self.assertEqual(self.list, dlist([1, 2, 3, "1", "2", "3", 1, 2, 3]))
 
         self.list.extend(others_dict)
-        self.assertEqual(self.list, [1, 2, 3, "1", "2", "3", 1, 2, 3, 1, 2, 3])
+        self.assertEqual(self.list, dlist([1, 2, 3, "1", "2", "3", 1, 2, 3, 1, 2, 3]))
 
         with self.assertRaises(TypeError):
             self.list.extend(others_int)
@@ -613,16 +613,16 @@ class TestDoublyList(unittest.TestCase):
         self.assertFalse(self.dlist)
 
         self.dlist.extend(others_dlist)
-        self.assertEqual(self.dlist, [1, 2, 3])
+        self.assertEqual(self.dlist, dlist([1, 2, 3]))
 
         self.dlist.extend(others_string)
-        self.assertEqual(self.dlist, [1, 2, 3, "1", "2", "3"])
+        self.assertEqual(self.dlist, dlist([1, 2, 3, "1", "2", "3"]))
 
         self.dlist.extend(others_set)
-        self.assertEqual(self.dlist, [1, 2, 3, "1", "2", "3", 1, 2, 3])
+        self.assertEqual(self.dlist, dlist([1, 2, 3, "1", "2", "3", 1, 2, 3]))
 
         self.dlist.extend(others_dict)
-        self.assertEqual(self.dlist, [1, 2, 3, "1", "2", "3", 1, 2, 3, 1, 2, 3])
+        self.assertEqual(self.dlist, dlist([1, 2, 3, "1", "2", "3", 1, 2, 3, 1, 2, 3]))
 
         with self.assertRaises(TypeError):
             self.dlist.extend(others_int)
@@ -794,11 +794,11 @@ class TestDoublyListSlice(unittest.TestCase):
             _ = self.dl[4]
 
     def test_slicing(self):
-        self.assertEqual(self.dl[:2], [10, 20])
-        self.assertEqual(self.dl[1:3], [20, 30])
-        self.assertEqual(self.dl[::2], [10, 30])
-        self.assertEqual(self.dl[1:], [20, 30, 40])
-        self.assertEqual(self.dl[:], [10, 20, 30, 40])
+        self.assertEqual(self.dl[:2], dlist([10, 20]))
+        self.assertEqual(self.dl[1:3], dlist([20, 30]))
+        self.assertEqual(self.dl[::2], dlist([10, 30]))
+        self.assertEqual(self.dl[1:], dlist([20, 30, 40]))
+        self.assertEqual(self.dl[:], dlist([10, 20, 30, 40]))
 
     def test_negative_index(self):
         self.assertEqual(self.dl[-1], 40)
@@ -808,9 +808,9 @@ class TestDoublyListSlice(unittest.TestCase):
             _ = self.dl[-5]
 
     def test_negative_slicing(self):
-        self.assertEqual(self.dl[-3:], [20, 30, 40])
-        self.assertEqual(self.dl[-4:-1], [10, 20, 30])
-        self.assertEqual(self.dl[::-1], [40, 30, 20, 10])
+        self.assertEqual(self.dl[-3:], dlist([20, 30, 40]))
+        self.assertEqual(self.dl[-4:-1], dlist([10, 20, 30]))
+        self.assertEqual(self.dl[::-1], dlist([40, 30, 20, 10]))
 
     def test_invalid_type(self):
         with self.assertRaises(TypeError):

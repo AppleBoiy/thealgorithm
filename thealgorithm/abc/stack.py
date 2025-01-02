@@ -1,10 +1,10 @@
 from collections.abc import Iterable
 
-from .sequence import Sequence
+from .base import ABCIterable
 from .node import Node
 
 
-class Stack(Sequence):
+class Stack(ABCIterable):
     def __init__(self, *values, size=1000):
         super().__init__()
         self._head = None
@@ -59,7 +59,6 @@ class Stack(Sequence):
     def clear(self):
         self._size = 0
         self._head = None
-
 
     def extend(self, *others):
         if len(others) + len(self) > self._max_size:

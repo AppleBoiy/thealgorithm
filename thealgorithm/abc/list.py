@@ -1,13 +1,13 @@
 from collections.abc import Iterable
-from .sequence import MutSequence
+
+from .base import MutSequence, ABCIterable
 from .node import Node
 
 
-class LinearList(MutSequence, Iterable):
+class LinearList(MutSequence, ABCIterable):
     def __init__(self, *values):
         super().__init__()
         self._head = None
-        self._size = 0
 
         if values:
             self.extend(*values)
@@ -66,14 +66,6 @@ class LinearList(MutSequence, Iterable):
     def clear(self):
         self._head = None
         self._size = 0
-
-    def find(self, value):
-        if not self:
-            return -1
-        for i, ivalue in enumerate(self):
-            if ivalue == value:
-                return i
-        return -1
 
     def get(self, index):
         if index < 0 or index >= self._size:
@@ -158,12 +150,11 @@ class LinearList(MutSequence, Iterable):
                 self.append(value)
 
 
-class DoublyList(MutSequence, Iterable):
+class DoublyList(MutSequence, ABCIterable):
     def __init__(self, *values):
         super().__init__()
         self._head = None
         self._tail = None
-        self._size = 0
 
         if values:
             self.extend(*values)
@@ -284,14 +275,6 @@ class DoublyList(MutSequence, Iterable):
             _curr.prev = _new
 
             self._size += 1
-
-    def find(self, value):
-        if not self:
-            return -1
-        for i, ivalue in enumerate(self):
-            if value == ivalue:
-                return i
-        return -1
 
     def pop(self, index=None):
         if not self._size:

@@ -1,7 +1,4 @@
-from collections.abc import MutableSequence
-
-
-def partition(seq: MutableSequence, left: int, right: int, reverse: bool) -> int:
+def partition(seq, left: int, right: int, reverse: bool) -> int:
     slow = pivot = left
 
     for fast in range(left + 1, right + 1):
@@ -13,7 +10,7 @@ def partition(seq: MutableSequence, left: int, right: int, reverse: bool) -> int
     return slow
 
 
-def quick(seq: MutableSequence, left: int, right: int, reverse: bool = False) -> None:
+def quick(seq, left: int, right: int, reverse: bool = False) -> None:
     if left < right:
         pivot = partition(seq, left, right, reverse)
         quick(seq, left, pivot - 1, reverse)
