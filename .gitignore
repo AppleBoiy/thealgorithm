@@ -9,6 +9,5 @@ python/venv/
 venv/
 *.pyc
 *.pyo
-*.idea/
 .coverage
 htmlcov/

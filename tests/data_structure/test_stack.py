@@ -1,11 +1,11 @@
 import unittest
-from thealgorithm.abc.stack import Stack
+from thealgorithm.abc import stack
 
 
 class TestStackPush(unittest.TestCase):
 
     def setUp(self):
-        self.stack = Stack(size=3)
+        self.stack = stack(size=3)
 
     def test_push_single_element(self):
         self.stack.push(10)
@@ -37,7 +37,7 @@ class TestStackPush(unittest.TestCase):
 class TestStackPop(unittest.TestCase):
 
     def setUp(self):
-        self.stack = Stack(size=3)
+        self.stack = stack(size=3)
         self.stack.push(10)
         self.stack.push(20)
         self.stack.push(30)
@@ -78,7 +78,7 @@ class TestStackPop(unittest.TestCase):
 class TestStackExtended(unittest.TestCase):
 
     def setUp(self):
-        self.stack = Stack()
+        self.stack = stack()
         self.stack.push(10)
         self.stack.push(20)
         self.stack.push(30)
@@ -101,79 +101,82 @@ class TestStackExtended(unittest.TestCase):
 
 
 class TestStack(unittest.TestCase):
+    def setUp(self):
+        self.stack = stack(size=3)
+
     def test_init_empty(self):
-        stack = Stack()
-        self.assertEqual(len(stack), 0)
-        self.assertIsNone(stack.peek())
+        self.stack = stack()
+        self.assertEqual(len(self.stack), 0)
+        self.assertIsNone(self.stack.peek())
 
     def test_init_with_values(self):
-        stack = Stack(1, 2, 3)
-        self.assertEqual(len(stack), 3)
-        self.assertEqual(stack.pop(), 3)
-        self.assertEqual(stack.pop(), 2)
-        self.assertEqual(stack.pop(), 1)
+        self.stack = stack(1, 2, 3)
+        self.assertEqual(len(self.stack), 3)
+        self.assertEqual(self.stack.pop(), 3)
+        self.assertEqual(self.stack.pop(), 2)
+        self.assertEqual(self.stack.pop(), 1)
 
     def test_push(self):
-        stack = Stack()
-        stack.push(10)
-        self.assertEqual(len(stack), 1)
-        self.assertEqual(stack.peek(), 10)
+        self.stack = stack()
+        self.stack.push(10)
+        self.assertEqual(len(self.stack), 1)
+        self.assertEqual(self.stack.peek(), 10)
 
     def test_pop(self):
-        stack = Stack(1, 2, 3)
-        self.assertEqual(stack.pop(), 3)
-        self.assertEqual(len(stack), 2)
-        self.assertEqual(stack.pop(), 2)
-        self.assertEqual(stack.pop(), 1)
-        self.assertEqual(len(stack), 0)
+        self.stack = stack(1, 2, 3)
+        self.assertEqual(self.stack.pop(), 3)
+        self.assertEqual(len(self.stack), 2)
+        self.assertEqual(self.stack.pop(), 2)
+        self.assertEqual(self.stack.pop(), 1)
+        self.assertEqual(len(self.stack), 0)
         with self.assertRaises(IndexError):
-            stack.pop()
+            self.stack.pop()
 
     def test_peek(self):
-        stack = Stack(1, 2, 3)
-        self.assertEqual(stack.peek(), 3)
-        stack.pop()
-        self.assertEqual(stack.peek(), 2)
+        self.stack = stack(1, 2, 3)
+        self.assertEqual(self.stack.peek(), 3)
+        self.stack.pop()
+        self.assertEqual(self.stack.peek(), 2)
 
     def test_clear(self):
-        stack = Stack(1, 2, 3)
-        stack.clear()
-        self.assertEqual(len(stack), 0)
-        self.assertIsNone(stack.peek())
+        s = stack(1, 2, 3)
+        s.clear()
+        self.assertEqual(len(s), 0)
+        self.assertIsNone(s.peek())
 
     def test_max_size(self):
-        stack = Stack(size=3)
-        stack.push(1)
-        stack.push(2)
-        stack.push(3)
+        s = stack(size=3)
+        s.push(1)
+        s.push(2)
+        s.push(3)
         with self.assertRaises(OverflowError):
-            stack.push(4)
+            s.push(4)
 
     def test_extend(self):
-        stack = Stack(size=5)
-        stack.extend([1, 2])
-        self.assertEqual(len(stack), 2)
-        self.assertEqual(stack.pop(), 2)
-        self.assertEqual(stack.pop(), 1)
+        s = stack(size=5)
+        s.extend([1, 2])
+        self.assertEqual(len(s), 2)
+        self.assertEqual(s.pop(), 2)
+        self.assertEqual(s.pop(), 1)
 
     def test_extend_overflow(self):
-        stack = Stack(size=3)
-        stack.extend([1, 2])
+        s = stack(size=3)
+        s.extend([1, 2])
         with self.assertRaises(OverflowError):
-            stack.extend([3, 4])
+            s.extend([3, 4])
 
     def test_extend_with_non_iterable(self):
-        stack = Stack()
+        s = stack()
         with self.assertRaises(TypeError):
-            stack.extend(10)  # Passing a non-iterable
+            s.extend(10)  # Passing a non-iterable
 
     def test_repr(self):
-        stack = Stack(1, 2, 3, size=5)
-        self.assertEqual(repr(stack), "Stack(3 2 1)")
-        stack.pop()
-        self.assertEqual(repr(stack), "Stack(2 1)")
-        stack.clear()
-        self.assertEqual(repr(stack), "Stack()")
+        s = stack(1, 2, 3, size=5)
+        self.assertEqual(repr(s), "Stack(3 2 1)")
+        s.pop()
+        self.assertEqual(repr(s), "Stack(2 1)")
+        s.clear()
+        self.assertEqual(repr(s), "Stack()")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,3 @@
 from .list import LinearList as llist, DoublyList as dlist
-
-__all__ = ["llist", "dlist"]
+from .stack import Stack as stack
+__all__ = ["llist", "dlist", "stack"]
