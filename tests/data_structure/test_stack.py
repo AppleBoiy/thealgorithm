@@ -116,6 +116,13 @@ class TestStack(unittest.TestCase):
         self.assertEqual(self.stack.pop(), 2)
         self.assertEqual(self.stack.pop(), 1)
 
+    def test_init_by_string(self):
+        self.stack = stack("abc")
+        self.assertEqual(len(self.stack), 3)
+        self.assertEqual(self.stack.pop(), "c")
+        self.assertEqual(self.stack.pop(), "b")
+        self.assertEqual(self.stack.pop(), "a")
+
     def test_push(self):
         self.stack = stack()
         self.stack.push(10)
