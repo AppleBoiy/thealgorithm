@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from .__base__ import MutSequence
+from .sequence import MutSequence
 from .node import Node
 
 
@@ -98,7 +98,7 @@ class LinearList(MutSequence, Iterable):
             _prev.next = _new
         else:
             _next = _curr.next
-            # if has any item next to current index
+            # if it has any item next to current index
             if _next:
                 _new.next = _next
             _curr.next = _new

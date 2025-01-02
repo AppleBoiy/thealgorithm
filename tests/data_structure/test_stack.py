@@ -100,5 +100,82 @@ class TestStackExtended(unittest.TestCase):
         self.assertEqual(len(self.stack), 0)
 
 
+class TestStack(unittest.TestCase):
+    def test_init_empty(self):
+        stack = Stack()
+        self.assertEqual(len(stack), 0)
+        self.assertIsNone(stack.peek())
+
+    def test_init_with_values(self):
+        stack = Stack(1, 2, 3)
+        self.assertEqual(len(stack), 3)
+        self.assertEqual(stack.pop(), 3)
+        self.assertEqual(stack.pop(), 2)
+        self.assertEqual(stack.pop(), 1)
+
+    def test_push(self):
+        stack = Stack()
+        stack.push(10)
+        self.assertEqual(len(stack), 1)
+        self.assertEqual(stack.peek(), 10)
+
+    def test_pop(self):
+        stack = Stack(1, 2, 3)
+        self.assertEqual(stack.pop(), 3)
+        self.assertEqual(len(stack), 2)
+        self.assertEqual(stack.pop(), 2)
+        self.assertEqual(stack.pop(), 1)
+        self.assertEqual(len(stack), 0)
+        with self.assertRaises(IndexError):
+            stack.pop()
+
+    def test_peek(self):
+        stack = Stack(1, 2, 3)
+        self.assertEqual(stack.peek(), 3)
+        stack.pop()
+        self.assertEqual(stack.peek(), 2)
+
+    def test_clear(self):
+        stack = Stack(1, 2, 3)
+        stack.clear()
+        self.assertEqual(len(stack), 0)
+        self.assertIsNone(stack.peek())
+
+    def test_max_size(self):
+        stack = Stack(size=3)
+        stack.push(1)
+        stack.push(2)
+        stack.push(3)
+        with self.assertRaises(OverflowError):
+            stack.push(4)
+
+    def test_extend(self):
+        stack = Stack(size=5)
+        stack.extend([1, 2])
+        self.assertEqual(len(stack), 2)
+        self.assertEqual(stack.pop(), 2)
+        self.assertEqual(stack.pop(), 1)
+
+    def test_extend_overflow(self):
+        stack = Stack(size=3)
+        stack.extend([1, 2])
+        with self.assertRaises(OverflowError):
+            stack.extend([3, 4])
+
+    def test_extend_with_non_iterable(self):
+        stack = Stack()
+        with self.assertRaises(TypeError):
+            stack.extend(10)  # Passing a non-iterable
+
+    def test_repr(self):
+        stack = Stack(1, 2, 3, size=5)
+        self.assertEqual(repr(stack), "Stack(3 2 1)")
+        stack.pop()
+        self.assertEqual(repr(stack), "Stack(2 1)")
+        stack.clear()
+        self.assertEqual(repr(stack), "Stack()")
+
+
 if __name__ == "__main__":
     unittest.main()
+

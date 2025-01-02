@@ -1,5 +1,5 @@
 import unittest
-from thealgorithm.abc.__base__ import MutSequence
+from thealgorithm.abc.sequence import MutSequence
 
 
 class TestMutSequence(unittest.TestCase):

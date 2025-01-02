@@ -1,12 +1,37 @@
-from .__base__ import Sequence
+from collections.abc import Iterable
+
+from .sequence import Sequence
 from .node import Node
 
 
 class Stack(Sequence):
-    def __init__(self, size=1000):
+    def __init__(self, *values, size=1000):
         super().__init__()
         self._head = None
         self._max_size = size
+
+        if values:
+            self.extend(values)
+
+    def __repr__(self):
+        rper = f"Stack("
+        for v in self:
+            rper += f"{v} "
+        return rper.rstrip(" ") + ")"
+
+    def __iter__(self):
+        self._curr = self._head
+        return self
+
+    def __next__(self):
+        if self._curr is None:
+            raise StopIteration
+        value = self._curr.value
+        self._curr = self._curr.next
+        return value
+
+    def __del__(self):
+        self.clear()
 
     def push(self, value):
         if not self:
@@ -34,3 +59,14 @@ class Stack(Sequence):
     def clear(self):
         self._size = 0
         self._head = None
+
+
+    def extend(self, *others):
+        if len(others) + len(self) > self._max_size:
+            raise OverflowError("the stack has reached its maximum capacity.")
+
+        for other in others:
+            if not isinstance(other, Iterable):
+                raise TypeError(f"{type(other).__name__} object is not an iterable.")
+            for value in other:
+                self.push(value)
