@@ -68,7 +68,7 @@ class TestStackPop(unittest.TestCase):
         self.assertEqual(str(context.exception), "pop from empty stack")
 
     def test_pop_after_overflow(self):
-        with self.assertRaises(OverflowError) as context:
+        with self.assertRaises(OverflowError):
             self.stack.push(40)
         popped_value = self.stack.pop()  # Pops 30
         self.assertEqual(popped_value, 30)
@@ -110,7 +110,7 @@ class TestStack(unittest.TestCase):
         self.assertIsNone(self.stack.peek())
 
     def test_init_with_values(self):
-        self.stack = stack(1, 2, 3)
+        self.stack = stack([1, 2, 3])
         self.assertEqual(len(self.stack), 3)
         self.assertEqual(self.stack.pop(), 3)
         self.assertEqual(self.stack.pop(), 2)
@@ -123,7 +123,7 @@ class TestStack(unittest.TestCase):
         self.assertEqual(self.stack.peek(), 10)
 
     def test_pop(self):
-        self.stack = stack(1, 2, 3)
+        self.stack = stack([1, 2, 3])
         self.assertEqual(self.stack.pop(), 3)
         self.assertEqual(len(self.stack), 2)
         self.assertEqual(self.stack.pop(), 2)
@@ -133,13 +133,13 @@ class TestStack(unittest.TestCase):
             self.stack.pop()
 
     def test_peek(self):
-        self.stack = stack(1, 2, 3)
+        self.stack = stack([1, 2, 3])
         self.assertEqual(self.stack.peek(), 3)
         self.stack.pop()
         self.assertEqual(self.stack.peek(), 2)
 
     def test_clear(self):
-        s = stack(1, 2, 3)
+        s = stack([1, 2, 3])
         s.clear()
         self.assertEqual(len(s), 0)
         self.assertIsNone(s.peek())
@@ -171,7 +171,7 @@ class TestStack(unittest.TestCase):
             s.extend(10)  # Passing a non-iterable
 
     def test_repr(self):
-        s = stack(1, 2, 3, size=5)
+        s = stack([1, 2, 3], size=5)
         self.assertEqual(repr(s), "Stack(3 2 1)")
         s.pop()
         self.assertEqual(repr(s), "Stack(2 1)")

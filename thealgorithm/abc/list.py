@@ -9,8 +9,13 @@ class LinearList(MutSequence, ABCIterable):
         super().__init__()
         self._head = None
 
-        if values:
-            self.extend(*values)
+        if len(values) == 1:
+            if not isinstance(values[0], Iterable):
+                raise TypeError(f"{type(values[0]).__name__} object is not iterable")
+            elif isinstance(values[0], Iterable):
+                self.extend(values[0])
+        else:
+            self.extend(values)
 
     def __repr__(self):
         return f"[{' '.join(map(str, self))}]"
@@ -142,12 +147,11 @@ class LinearList(MutSequence, ABCIterable):
         _from, _to = self.__get_node(from_i), self.__get_node(to_i)
         _from.value, _to.value = _to.value, _from.value
 
-    def extend(self, *others):
-        for other in others:
-            if not isinstance(other, Iterable):
-                raise TypeError(f"'{type(other).__name__}' object is not iterable")
-            for value in other:
-                self.append(value)
+    def extend(self, other):
+        if not isinstance(other, Iterable):
+            raise TypeError(f"{type(other).__name__} object is not an iterable.")
+        for value in other:
+            self.append(value)
 
 
 class DoublyList(MutSequence, ABCIterable):
@@ -156,8 +160,13 @@ class DoublyList(MutSequence, ABCIterable):
         self._head = None
         self._tail = None
 
-        if values:
-            self.extend(*values)
+        if len(values) == 1:
+            if not isinstance(values[0], Iterable):
+                raise TypeError(f"{type(values[0]).__name__} object is not iterable")
+            elif isinstance(values[0], Iterable):
+                self.extend(values[0])
+        else:
+            self.extend(values)
 
     def __repr__(self):
         return f"[{' '.join(map(str, self))}]"
@@ -313,9 +322,8 @@ class DoublyList(MutSequence, ABCIterable):
         _from, _to = self.__get_node(from_i), self.__get_node(to_i)
         _from.value, _to.value = _to.value, _from.value
 
-    def extend(self, *others):
-        for other in others:
-            if not isinstance(other, Iterable):
-                raise TypeError(f"'{type(other).__name__}' object is not iterable")
-            for value in other:
-                self.append(value)
+    def extend(self, other):
+        if not isinstance(other, Iterable):
+            raise TypeError(f"{type(other).__name__} object is not an iterable.")
+        for value in other:
+            self.append(value)

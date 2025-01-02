@@ -5,12 +5,14 @@ from .node import Node
 
 
 class Stack(ABCIterable):
-    def __init__(self, *values, size=1000):
+    def __init__(self, values=None, size=1000):
         super().__init__()
         self._head = None
         self._max_size = size
 
-        if values:
+        if values is not None:
+            if not isinstance(values, Iterable):
+                raise TypeError(f"{type(values).__name__} object is not an iterable.")
             self.extend(values)
 
     def __repr__(self):
@@ -60,12 +62,12 @@ class Stack(ABCIterable):
         self._size = 0
         self._head = None
 
-    def extend(self, *others):
-        if len(others) + len(self) > self._max_size:
-            raise OverflowError("the stack has reached its maximum capacity.")
+    def extend(self, other):
+        if not isinstance(other, Iterable):
+            raise TypeError(f"{type(other).__name__} object is not an iterable.")
 
-        for other in others:
-            if not isinstance(other, Iterable):
-                raise TypeError(f"{type(other).__name__} object is not an iterable.")
-            for value in other:
-                self.push(value)
+        if len(self) + sum(1 for _ in other) > self._max_size:
+            raise OverflowError("The stack has reached its maximum capacity.")
+
+        for value in other:
+            self.push(value)

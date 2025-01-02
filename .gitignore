@@ -11,3 +11,4 @@ venv/
 *.pyo
 .coverage
 htmlcov/
+test.py
