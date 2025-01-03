@@ -20,7 +20,7 @@ class ABCIterable(Iterable):
         self.clear()
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({' '.join(str(var) for var in self)})"
+        return f"{self.__class__.__name__}({', '.join(str(var) for var in self)})"
 
     def clear(self):
         raise NotImplementedError("clear() method is not implemented yet")

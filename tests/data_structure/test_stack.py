@@ -179,9 +179,9 @@ class TestStack(unittest.TestCase):
 
     def test_repr(self):
         s = stack([1, 2, 3], size=5)
-        self.assertEqual(repr(s), "Stack(3 2 1)")
+        self.assertEqual(repr(s), "Stack(3, 2, 1)")
         s.pop()
-        self.assertEqual(repr(s), "Stack(2 1)")
+        self.assertEqual(repr(s), "Stack(2, 1)")
         s.clear()
         self.assertEqual(repr(s), "Stack()")
 
