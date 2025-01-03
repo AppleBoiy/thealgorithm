@@ -9,18 +9,6 @@ class PriorityQueue(Queue, Sequence):
         if iterable is not None:
             self.extend(iterable)
 
-    def __setitem__(self, index: int, value, priority=None):
-        if index < 0 or index >= self._size:
-            raise IndexError(
-                "priority_queue.__setitem__(index, value): index out of range."
-            )
-        _curr = self._head
-        for _ in range(index):
-            _curr = _curr.next
-
-        _curr.value = value
-        _curr.priority = priority
-
     def __getitem__(self, index: int) -> PriorityNode:
         if index < 0 or index >= self._size:
             raise IndexError("priority_queue.__getitem__(index): index out of range.")
