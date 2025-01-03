@@ -4,8 +4,8 @@ from collections.abc import Iterable, Sequence
 
 
 class ABCIterable(Iterable):
-    def __init__(self):
-        self._size = 0
+    def __init__(self, size=0):
+        self._size = size
 
     def __len__(self):
         return self._size
