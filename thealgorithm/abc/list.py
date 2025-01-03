@@ -31,9 +31,6 @@ class LinearList(MutSequence, ABCIterable):
         self._curr = self._curr.next
         return value
 
-    def __del__(self):
-        self.clear()
-
     def __delitem__(self, index):
         if index < 0 or index >= self._size:
             raise IndexError("llist.__delitem__(index): index out of range.")
@@ -181,9 +178,6 @@ class DoublyList(MutSequence, ABCIterable):
         value = self._curr.value
         self._curr = self._curr.next
         return value
-
-    def __del__(self):
-        self.clear()
 
     def __get_node(self, index):
         # negative index is allow.
