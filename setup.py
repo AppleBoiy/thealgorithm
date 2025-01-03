@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="thealgorithm",
-    version="0.0.1a7",
+    version="0.0.1b1",
     description="AppleBoiy's algorithm package",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

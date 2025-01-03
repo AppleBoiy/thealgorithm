@@ -64,21 +64,27 @@ class TestArray(unittest.TestCase):
     def test_array_extend_with_strings(self):
         arr = array(ctype=ctypes.c_wchar_p, size=5, iterable=["a", "b"])
         arr.extend(["c", "d"])
-        self.assertEqual(arr[2], "c")
-        self.assertEqual(arr[3], "d")
+        self.assertEqual(arr[0], "c")
+        self.assertEqual(arr[1], "d")
+        self.assertEqual(arr[2], None)
+        self.assertEqual(arr[3], None)
+        self.assertEqual(arr[4], None)
+        with self.assertRaises(IndexError):
+            _ = arr[5]
 
     def test_array_extend_with_complex(self):
         arr = array(ctype=icomplex, size=5, iterable=[icomplex(1, 1), icomplex(2, 2)])
         arr.extend([icomplex(3, 3)])
-        self.assertEqual(arr[2], icomplex(3, 3))
+        self.assertEqual(arr[0], icomplex(3, 3))
+        self.assertEqual(arr[2], icomplex(0, 0))
 
     def test_array_extend_with_frozenset(self):
         arr = array(
             ctype=ctypes.py_object, size=5, iterable=[frozenset({1}), frozenset({2})]
         )
         arr.extend([frozenset({3}), frozenset({4})])
-        self.assertEqual(arr[2], frozenset({3}))
-        self.assertEqual(arr[3], frozenset({4}))
+        self.assertEqual(arr[0], frozenset({3}))
+        self.assertEqual(arr[1], frozenset({4}))
 
 
 if __name__ == "__main__":
