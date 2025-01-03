@@ -57,6 +57,15 @@ class TestQueue(unittest.TestCase):
         with self.assertRaises(OverflowError):
             q.extend([4, 5, 6])
 
+    def test_extend_invalid_values(self):
+        q = queue()
+        with self.assertRaises(TypeError):
+            q.extend(123)
+        with self.assertRaises(TypeError):
+            q.extend(None)
+        with self.assertRaises(TypeError):
+            q.extend(0b10)
+
     def test_iteration(self):
         q = queue([1, 2, 3])
         values = list(iter(q))
