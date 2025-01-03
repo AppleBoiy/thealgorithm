@@ -1,72 +1,90 @@
-class PQNode:
-    def __init__(self, data, priority=0):
-        self.data = data
-        self._priority = priority
-        self._next = None
+from .node import PriorityNode
+from .queue import Queue
+from .base import Sequence
 
-    @property
-    def priority(self):
-        return self._priority
 
-    @priority.setter
-    def priority(self, priority):
-        self._priority = priority
+class PriorityQueue(Queue, Sequence):
+    def __init__(self, iterable=None, size=1000):
+        super().__init__(size=size)
+        if iterable is not None:
+            self.extend(iterable)
 
-    @property
-    def next(self):
-        return self._next
+    def __setitem__(self, index: int, value, priority=None):
+        if index < 0 or index >= self._size:
+            raise IndexError(
+                "priority_queue.__setitem__(index, value): index out of range."
+            )
+        _curr = self._head
+        for _ in range(index):
+            _curr = _curr.next
 
-    @next.setter
-    def next(self, next):
-        self._next = next
+        _curr.value = value
+        _curr.priority = priority
+
+    def __getitem__(self, index: int) -> PriorityNode:
+        if index < 0 or index >= self._size:
+            raise IndexError("priority_queue.__getitem__(index): index out of range.")
+        _curr = self._head
+        for _ in range(index):
+            _curr = _curr.next
+        return _curr
 
     def __repr__(self):
-        return f"PriorityQueue({self.priority} {self.data})"
+        _str = "PriorityQueue("
+        for i in range(self._size):
+            _str += f"{self[i].priority}: {self[i].value}, "
+        return _str.rstrip(", ") + ")"
 
-
-class PQ:
-    def __init__(self, head):
-        self.head = head
-
-    def is_empty(self):
-        return self.head == None
-
-    def enqueue(self, new):
-        # insert new data
-        if self.is_empty():
-            self.head = new
-        else:
-            if new.priority < self.head.priority:
-                new.next = self.head
-                self.head = new
-            else:
-                current = self.head
-                while current.next != None and current.next.priority <= new.priority:
-                    current = current.next
-                new.next = current.next
-                current = new
+    def peek(self):
+        if not self:
+            return None
+        return self._head.value
 
     def dequeue(self):
-        # pop the most priority from queue
-        if self.is_empty():
-            return None
+        if not self:
+            raise IndexError("dequeue from empty priority_queue")
+        value = self._head.value
+        self._head = self._head.next
+        self._size -= 1
+        return value
+
+    def enqueue(self, value, priority=None):
+        if len(self) >= self._max_size:
+            raise OverflowError("The priority_queue has reached its maximum capacity.")
+
+        new = PriorityNode(value=value, _priority=priority)
+
+        if not self:
+            self._head = self._tail = new
         else:
-            current = self.head
-            self.head = self.head.next
-            return current
+            _curr = self._head
+            _prev = None
+            while _curr and _curr.priority >= priority:
+                _prev = _curr
+                _curr = _curr.next
 
-    def top(self):
-        return self.head
-
-    @classmethod
-    def from_iterable(cls, iterable):
-        head = None
-        for data, priority in iterable:
-            if head is None:
-                head = PQNode(data, priority)
+            if _prev is None:
+                new.next = self._head
+                self._head.prev = new
+                self._head = new
+            elif _curr is None:
+                self._tail.next = new
+                new.prev = self._tail
+                self._tail = new
             else:
-                current = head
-                while current.next is not None:
-                    current = current.next
-                current.next = PQNode(data, priority)
-        return cls(head)
+                _prev.next = new
+                new.prev = _prev
+                new.next = _curr
+                _curr.prev = new
+
+        self._size += 1
+
+    def extend(self, other):
+        if not isinstance(other, Sequence):
+            raise TypeError(f"{type(other).__name__} object is not iterable.")
+
+        if len(self) + len(other) > self._max_size:
+            raise OverflowError("The priority_queue has reached its maximum capacity.")
+
+        for priority, value in other:
+            self.enqueue(value, priority=priority)

@@ -1,6 +1,7 @@
 import unittest
 from thealgorithm.abc import queue
 
+
 class TestQueue(unittest.TestCase):
     def test_initialization(self):
         q = queue()
@@ -81,6 +82,7 @@ class TestQueue(unittest.TestCase):
         q.enqueue(2)
         with self.assertRaises(OverflowError):
             q.enqueue(3)
+
 
 if __name__ == "__main__":
     unittest.main()

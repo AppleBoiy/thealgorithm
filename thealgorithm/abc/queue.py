@@ -5,16 +5,16 @@ from .node import Node
 
 
 class Queue(ABCIterable):
-    def __init__(self, values=None, size=1000):
+    def __init__(self, iterable=None, size=1000):
         super().__init__()
         self._head = None
         self._tail = None
         self._max_size = size
 
-        if values is not None:
-            if not isinstance(values, Iterable):
-                raise TypeError(f"{type(values).__name__} object is not an iterable.")
-            self.extend(values)
+        if iterable is not None:
+            if not isinstance(iterable, Iterable):
+                raise TypeError(f"{type(iterable).__name__} object is not an iterable.")
+            self.extend(iterable)
 
     def __iter__(self):
         self._curr = self._head
@@ -32,15 +32,15 @@ class Queue(ABCIterable):
         self._head = None
 
     def enqueue(self, value):
+        if len(self) >= self._max_size:
+            raise OverflowError("the queue has reached its maximum capacity.")
+
         if not self:
             self._head = self._tail = Node(value)
             self._size = 1
             return
 
-        if len(self) >= self._max_size:
-            raise OverflowError("the queue has reached its maximum capacity.")
-
-        self._tail.next = Node(value, next=self._tail.next, prev=self._tail)
+        self._tail.next = Node(value, _next=self._tail.next, _prev=self._tail)
         self._tail = self._tail.next
         self._size += 1
 

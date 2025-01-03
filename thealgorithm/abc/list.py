@@ -75,7 +75,7 @@ class LinearList(MutSequence, ABCIterable):
         return self.__get_node(index).value
 
     def push(self, value):
-        self._head = Node(value, next=self._head)
+        self._head = Node(value, _next=self._head)
         self._size += 1
 
     def insert(self, index, value):
@@ -235,7 +235,7 @@ class DoublyList(MutSequence, ABCIterable):
 
     # add new item at the top
     def push(self, value):
-        _new = Node(value, next=self._head)
+        _new = Node(value, _next=self._head)
         if not self:
             self._head = self._tail = _new
             self._size += 1
