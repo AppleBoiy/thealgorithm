@@ -41,3 +41,7 @@ class PriorityNode(Node):
 
     def __ne__(self, other: "PriorityNode") -> bool:
         return not self == other
+
+    def __iter__(self):
+        yield self.priority
+        yield self.value

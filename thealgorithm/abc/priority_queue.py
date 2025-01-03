@@ -74,5 +74,10 @@ class PriorityQueue(Queue, Sequence):
         if len(self) + len(other) > self._max_size:
             raise OverflowError("The priority_queue has reached its maximum capacity.")
 
-        for priority, value in other:
+        for item in other:
+            if isinstance(item, (tuple, list, dict)) and len(item) == 2:
+                priority, value = item
+            else:
+                priority, value = None, item
+
             self.enqueue(value, priority=priority)
