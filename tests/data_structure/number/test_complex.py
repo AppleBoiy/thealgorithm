@@ -1,6 +1,7 @@
 import unittest
 
 from thealgorithm.abc.number import icomplex
+from thealgorithm.abc.number.complex import iComplex
 
 
 class TestIComplex(unittest.TestCase):
@@ -146,3 +147,122 @@ class TestIComplexExtend(unittest.TestCase):
         self.assertTrue(z2 >= z3)
         self.assertFalse(z1 > z2)
         self.assertFalse(z2 < z1)
+
+
+class TestIComplexTruediv(unittest.TestCase):
+    def test_truediv_with_non_zero_complex(self):
+        num1 = iComplex(4.0, 2.0)
+        num2 = iComplex(3.0, -1.0)
+        result = num1 / num2
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 1, places=2)
+        self.assertAlmostEqual(result.imag, 1, places=2)
+
+    def test_truediv_by_zero_complex(self):
+        num1 = iComplex(2.0, 3.0)
+        num2 = iComplex(0.0, 0.0)
+        with self.assertRaises(ZeroDivisionError) as context:
+            _ = num1 / num2
+        self.assertEqual(
+            str(context.exception), "Cannot divide by zero complex number."
+        )
+
+    def test_truediv_with_positive_scalar(self):
+        num = iComplex(6.0, 8.0)
+        scalar = 2.0
+        result = num / scalar
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 3.0, places=2)
+        self.assertAlmostEqual(result.imag, 4.0, places=2)
+
+    def test_truediv_with_negative_scalar(self):
+        num = iComplex(-9.0, 12.0)
+        scalar = -3.0
+        result = num / scalar
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 3.0, places=2)
+        self.assertAlmostEqual(result.imag, -4.0, places=2)
+
+    def test_truediv_by_zero_scalar(self):
+        num = iComplex(7.0, 5.0)
+        with self.assertRaises(ZeroDivisionError):
+            _ = num / 0.0
+
+    def test_truediv_with_large_complex(self):
+        num1 = iComplex(1.0e10, 1.0e10)
+        num2 = iComplex(2.0e10, -2.0e10)
+        result = num1 / num2
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 0.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.5, places=2)
+
+    def test_truediv_with_small_complex(self):
+        num1 = iComplex(1.0e-10, 1.0e-10)
+        num2 = iComplex(2.0e-10, -2.0e-10)
+        result = num1 / num2
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 0.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.5, places=2)
+
+    def test_truediv_near_zero_result(self):
+        num1 = iComplex(1.0e-10, 1.0e-10)
+        num2 = iComplex(1.0e10, 1.0e10)
+        result = num1 / num2
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 0.0, places=10)
+        self.assertAlmostEqual(result.imag, 0.0, places=10)
+
+    def test_truediv_self_division(self):
+        num = iComplex(4.5, 3.2)
+        result = num / num
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 1.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.0, places=2)
+
+    def test_truediv_where_numerator_is_zero(self):
+        num1 = iComplex(0.0, 0.0)
+        num2 = iComplex(4.0, 3.0)
+        result = num1 / num2
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 0.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.0, places=2)
+
+    def test_truediv_purely_real_denominator(self):
+        num = iComplex(6.0, 4.0)
+        denom = iComplex(3.0, 0.0)
+        result = num / denom
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 2.0, places=2)
+        self.assertAlmostEqual(result.imag, 1.33, places=2)
+
+    def test_truediv_purely_imaginary_denominator(self):
+        num = iComplex(6.0, 4.0)
+        denom = iComplex(0.0, 2.0)
+        result = num / denom
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, 2.0, places=2)
+        self.assertAlmostEqual(result.imag, -3.0, places=2)
+
+    def test_truediv_both_purely_imaginary(self):
+        num = iComplex(0.0, 4.0)
+        denom = iComplex(0.0, -2.0)
+        result = num / denom
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, -2.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.0, places=2)
+
+    def test_truediv_negative_numerator(self):
+        num = iComplex(-6.0, -8.0)
+        denom = iComplex(3.0, 4.0)
+        result = num / denom
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, -2.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.0, places=2)
+
+    def test_truediv_negative_denominator(self):
+        num = iComplex(6.0, 8.0)
+        denom = iComplex(-3.0, -4.0)
+        result = num / denom
+        self.assertIsInstance(result, iComplex)
+        self.assertAlmostEqual(result.real, -2.0, places=2)
+        self.assertAlmostEqual(result.imag, 0.0, places=2)
