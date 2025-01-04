@@ -7,16 +7,20 @@ class Array(MutSequence):
         super().__init__(size)
         self.ctype = ctype
         self.array = (ctype * size)()
+        self._cptr = 0
         if iterable:
             self.extend(iterable)
 
     def __setitem__(self, index, value):
-        if index < 0 or index >= self._size:
+        if index == 0:
+            self.append(value)
+            return
+        if index < 0 or index >= self._size or self._cptr <= index:
             raise IndexError("Index out of range.")
         self.array[index] = value
 
     def __getitem__(self, index):
-        if index < 0 or index >= self._size:
+        if index < 0 or index >= self._size or self._cptr <= index:
             raise IndexError("Index out of range.")
         try:
             value = self.array[index]
@@ -28,17 +32,31 @@ class Array(MutSequence):
             raise NotImplemented("Array.__getitem__() is not implemented yet.")
 
     def __iter__(self):
-        for i in range(self._size):
+        for i in range(self._cptr):
             yield self.array[i]
 
     def extend(self, iterable):
-        if len(iterable) > self._size:
-            raise OverflowError("Cannot extend beyond the fixed size of the array.")
+        for value in iterable:
+            if self._cptr >= len(self.array):
+                raise OverflowError("Array has reached its maximum capacity.")
+            self.array[self._cptr] = value
+            self._cptr += 1
 
-        for i, value in enumerate(iterable):
-            self.array[i] = value
+    def pop(self):
+        if self._cptr == 0:
+            raise IndexError("pop from empty array")
+        value = self.array[self._cptr - 1]
+        self.array[self._cptr - 1] = self.ctype()
+        self._cptr -= 1
+        return value
+
+    def append(self, value):
+        if self._cptr >= len(self.array):
+            raise OverflowError("Array has reached its maximum capacity.")
+        self.array[self._cptr] = value
+        self._cptr += 1
 
     def clear(self):
         for i in range(self._size):
             self.array[i] = self.ctype()
-        self._size = 0
+        self._cptr = 0
